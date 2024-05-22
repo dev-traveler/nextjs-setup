@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) using below stack.
+
+- Yarn berry
+- Typescript
+- Eslint
+- Prettier
+- TailwindCSS
 
 ## Getting Started
 
-First, run the development server:
+### Set Yarn Berry
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Run:
+
+```zsh
+npx create-next-app@latest
+asdf local nodejs 20.13.1
+yarn set version berry
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Edit `.yarnrc.yml`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```yml
+yarnPath: .yarn/releases/yarn-4.2.2.cjs
+nodeLinker: pnp
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+If you're using Zero-Installs, Add it to `.gitignore`
 
-## Learn More
+```gitignore
+# yarn berry using zero-installs
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+```
 
-To learn more about Next.js, take a look at the following resources:
+And run:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```zsh
+yarn install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+If you`re using VSCode, run:
 
-## Deploy on Vercel
+```zsh
+yarn dlx @yarnpkg/sdks vscode
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Add Prettier
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Run:
+
+```zsh
+yarn add -D prettier eslint-plugin-prettier eslint-config-prettier
+```
+
+Edit `.eslintrc.json`
+
+```json
+{
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}
+```
+
+Add `.prettierrc` to root
+
+```json
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "all",
+  "arrowParens": "always"
+}
+```
+
+Run:
+
+```zsh
+yarn dlx @yarnpkg/sdks vscode
+```
+
+### Add typescript-eslint
+
+Run:
+
+```zsh
+yarn add -D @typescript-eslint/parser @typescript-eslint/eslint-plugin
+```
+
+Edit `.eslintrc.json`:
+
+```json
+{
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "root": true
+}
+```
+
+Run:
+
+```zsh
+yarn dlx @yarnpkg/sdks vscode
+```
+
+#### Trouble Shooting
+
+If eslint doesn't work in your VSCode and you have got this alert:
+
+```
+The JS/TS language service immediately crashed 5 times. The service will not be restarted.
+```
+
+you need to read these issues:
+
+https://github.com/microsoft/vscode/issues/213186
+https://github.com/yarnpkg/berry/issues/6270
+
+To reslove this problem (22 May 2024)
+
+- Add `"typescript.tsserver.experimental.useVsCodeWatcher": false` to `.vscode/settings.json` (should work at least until July)
